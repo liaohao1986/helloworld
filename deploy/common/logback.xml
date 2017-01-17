@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+	<appender name="access" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>../logs/access.log</File>
+		<Encoding>UTF-8</Encoding>
+		<Append>true</Append>
+		<encoder>
+			<!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %c{1}.%M:%L - %m%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/access.log.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+			<maxHistory>1</maxHistory>
+		</rollingPolicy>
+	</appender>
+
+	<appender name="logFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>../logs/console.log</File>
+		<encoder>
+			<!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+			<pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %c{1}.%M:%L - %m%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/console.log.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+			<maxHistory>1</maxHistory>
+		</rollingPolicy>
+	</appender>
+
+	<logger name="org.springframework" level="warn" />
+	<logger name="com.huoli" level="debug" />
+	<logger name="com.huoli.comm.grabber" level="error" />
+	<logger name="org.eclipse.jetty" level="info" />
+	<logger name="com.huoli.checkin.advice.WebInvokeAdvice" level="info" />
+	
+	<logger name="httpLog" additivity="false" level="INFO">
+		<appender-ref ref="access" />
+	</logger>
+
+	<root level="INFO">
+		<appender-ref ref="logFile" />
+	</root>
+</configuration>

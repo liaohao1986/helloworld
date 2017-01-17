@@ -1,0 +1,273 @@
+{
+    "version":"1.0",
+    "comment":"亚洲航空账号注册(airasia)",
+    "commRules":{
+		"comm_error":[
+		]
+    },
+    "actions":{
+    	"register":[
+    		{
+				"HttpMethod":"Get",
+				"url":"http://221.235.53.164:7000/common-helper/get_random_user.json",
+				"params":[
+				],
+				"result_parserules":[
+				   	{ "command":"stream_to_json", "in":"_receiveData", "out":"tmpJson" },
+	            	{ "command":"var_to_var", "in":"tmpJson(password)", "out":"password" },
+	            	{ "command":"var_to_var", "in":"tmpJson(name)", "out":"name" },
+	            	{ "command":"var_to_var", "in":"tmpJson(firstname)", "out":"firstName" },
+	            	{ "command":"var_to_var", "in":"tmpJson(lastname)", "out":"lastName" },
+	            	{ "command":"var_to_var", "in":"tmpJson(firstnamepy)", "out":"firstnamepy" },
+	            	{ "command":"var_to_var", "in":"tmpJson(lastnamepy)", "out":"lastnamepy" },
+	            	{ "command":"var_to_var", "in":"tmpJson(idcard)", "out":"idcard" },
+	            	{ "command":"var_to_var", "in":"tmpJson(birthday)", "out":"birthday" },
+	            	{ "command":"string_to_array", "in":"birthday", "out":"tmpArr", "split":"-" },
+					{ "command":"var_to_var", "in":"tmpArr[0]", "out":"ddlYear" },
+					{ "command":"var_to_var", "in":"tmpArr[1]", "out":"ddlMonth" },
+					{ "command":"var_to_var", "in":"tmpArr[2]", "out":"ddlDay" },
+	            	{ "command":"var_to_var", "in":"tmpJson(phone)", "out":"mobile" },
+	            	{ "command":"var_to_var", "in":"tmpJson(gender)", "out":"gender" },
+					{ "command":"var_to_var", "out":"tmpJson" }
+				]
+			},
+    		{
+    			"comment":"进入注册页",
+                "HttpMethod":"Get",
+                "url":"https://member.airasia.com/register.aspx?culture=zh-CN",
+                "referer":"https://member.airasia.com/register.aspx",
+                "params":[
+                	{ "httpKey":"Cookie", "default":"LanguageSelect=cn/zh;" },
+                	{ "httpKey":"Accept-Language", "default":"zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3" }
+				],
+                "result_parserules":[
+                	{ "command":"stream_to_html", "in":"_receiveData", "out":"__VIEWSTATE", "xpath":"//input[@id='__VIEWSTATE']/@value", "type":"text"},
+                	{ "command":"stream_to_html", "in":"_receiveData", "out":"__EVENTTARGET", "xpath":"//input[@id='__EVENTTARGET']/@value", "type":"text"},
+                	{ "command":"stream_to_html", "in":"_receiveData", "out":"__EVENTARGUMENT", "xpath":"//input[@id='__EVENTARGUMENT']/@value", "type":"text"},
+                	{ "command":"stream_to_html", "in":"_receiveData", "out":"__VIEWSTATEENCRYPTED", "xpath":"//input[@id='__VIEWSTATEENCRYPTED']/@value", "type":"text"},
+                	{ "command":"stream_to_html", "in":"_receiveData", "out":"__SCROLLPOSITIONX", "xpath":"//input[@id='__SCROLLPOSITIONX']/@value", "type":"text"},
+                	{ "command":"stream_to_html", "in":"_receiveData", "out":"__SCROLLPOSITIONY", "xpath":"//input[@id='__SCROLLPOSITIONY']/@value", "type":"text"},
+                	{ "command":"var_to_var", "out":"_receiveData" }
+                ]
+            },
+    		{
+    			"comment":"提交注册",
+                "HttpMethod":"Post",
+                "url":"https://member.airasia.com/register.aspx?culture=zh-CN",
+                "referer":"https://member.airasia.com/register.aspx?culture=zh-CN",
+                "input_parserules":[
+					{ "command":"if", "if":["gender", "=", "@M"], "rules":[
+                		{ "command":"var_to_var", "in":"@MR", "out":"gender" }
+        			], "else_rules":[
+        				{ "command":"var_to_var", "in":"@MS", "out":"gender" }
+        			]},
+        			{ "command":"var_to_var", "in":"email", "out":"username" },
+	            	{ "command":"var_to_var", "in":"@AK", "out":"type" },
+	            	{ "command":"var_to_var", "in":"@Huoli123", "out":"password" },
+	            	{ "command":"array_to_string", "in":["firstnamepy", "lastnamepy"], "out":"name", "join":"/" },
+	            	{ "command":"array_to_string", "in":["@{\"phone\":\"", "mobile", "@\",\"email\":\"", "email", "@\",\"name\":\"", "name", "@\",\"birthday\":\"", "birthday", "@\"}"], "out":"extData", "join":"" }
+				],
+                "params":[
+                	{ "httpKey":"ctl00$body$txtEmail" , "localKey":"email" },
+                    { "httpKey":"ctl00$body$txtPassword" , "default":"Huoli123" },
+                    { "httpKey":"ctl00$body$txtRePassword" , "default":"Huoli123" },
+                    { "httpKey":"ctl00$body$txtFirstName" , "localKey":"firstnamepy" },
+                    { "httpKey":"ctl00$body$txtLastName" , "localKey":"lastnamepy" },
+                    { "httpKey":"ctl00$body$ddlDay" , "localKey":"ddlDay" },
+                    { "httpKey":"ctl00$body$ddlMonth" , "localKey":"ddlMonth" },
+                    { "httpKey":"ctl00$body$ddlYear" , "localKey":"ddlYear" },
+                    { "httpKey":"ctl00$body$txtMobilePhone" , "localKey":"mobile" },
+                    { "httpKey":"ctl00$body$rblTitle"  , "localKey":"gender", "default":"MR" },
+                    { "httpKey":"ctl00$body$txtCity" , "default":"Wuhan" },
+                    { "httpKey":"ctl00$body$ddlCity" , "default":"Wuhan" },
+                    { "httpKey":"__VIEWSTATE" , "localKey":"__VIEWSTATE" },
+                    { "httpKey":"__EVENTTARGET" , "localKey":"__EVENTTARGET" },
+                    { "httpKey":"__EVENTARGUMENT" , "localKey":"__EVENTARGUMENT" },
+                    { "httpKey":"__VIEWSTATEENCRYPTED" , "localKey":"__VIEWSTATEENCRYPTED" },
+                    { "httpKey":"__SCROLLPOSITIONX" , "localKey":"__SCROLLPOSITIONX" },
+                    { "httpKey":"__SCROLLPOSITIONY" , "localKey":"__SCROLLPOSITIONY" },
+                    { "httpKey":"ctl00$body$hdfPost" , "default":"Y" },
+                    { "httpKey":"ctl00$body$rbnBigCard" , "default":"0" },
+                    { "httpKey":"ctl00$body$txtBIGShotID" , "default":"" },
+                    { "httpKey":"ctl00$body$ddlNationality" , "default":"CN" },
+                    { "httpKey":"ctl00$body$rbnParent" , "default":"P" },
+                    { "httpKey":"ctl00$body$txtParentFullName" , "default":"" },
+                    { "httpKey":"ctl00$body$txtParentPassport" , "default":"" },
+                    { "httpKey":"ctl00$body$txtParentEmail" , "default":"" },
+                    { "httpKey":"ctl00$body$ddlDialing" , "default":"CN" },
+                    { "httpKey":"ctl00$body$ddlCountry" , "default":"CN" },
+                    { "httpKey":"ctl00$body$hdfCountry" , "default":"CN" },
+                    { "httpKey":"ctl00$body$ddlState" , "default":"AN" },
+                    { "httpKey":"ctl00$body$hdfState" , "default":"AN" },
+                    { "httpKey":"ctl00$body$ckAgreement" , "default":"on" },
+                    { "httpKey":"ctl00$body$ddlPreferredLanguage" , "default":"zh-CN" },
+                    { "httpKey":"ctl00$body$hdfLanguage" , "default":"zh-CN" },
+                    { "httpKey":"ctl00$body$ckTnC1" , "default":"on" },
+                    { "httpKey":"ctl00$body$ckTnC2" , "default":"on" },
+                    { "httpKey":"ctl00$body$btnSignUp" , "default":"马上注册！" }
+                ],
+                "result_parserules":[
+                	{ "command":"stream_to_string", "in":"_receiveData", "out":"tmpString" },
+                	{"command":"stream_to_html","in":"_receiveData","out":"_errormsg","xpath":"//span[@id=\"body_lblUserError\"]", "type":"text" },
+                	{ "command":"trim", "in":"_errormsg", "out":"_errormsg" },
+                	{ "command":"if", "if":["_errormsg", ">", "@0", "length"], "rules":[
+	                	{ "command":"if", "if":["_errormsg", "=", "@该电子邮箱 ID 已存在，请另外选择"], "rules":[
+	                		{ "command":"var_to_var", "in":"@register", "out":"action" }
+	        			], "else_rules":[
+	        				{ "command":"var_to_var", "in":"_errormsg", "out":"resultError" }
+	        			]}
+        			], "else_rules":[
+						{ "command":"var_to_var", "out":"__VIEWSTATE" },
+						{ "command":"var_to_var", "in":"@success", "out":"resultStatus" }
+        			]}
+                ]
+    		}
+    	],
+		"resend_email":[
+			{
+	    			"comment":"进入激活页面",
+	                "HttpMethod":"Get",
+	                "url":"https://member.airasia.com/request-activation.aspx?culture=zh-CN",
+	                "referer":"https://member.airasia.com/login.aspx",
+	                "result_parserules":[
+	                	{ "command":"stream_to_html", "in":"_receiveData", "out":"__VIEWSTATE", "xpath":"//input[@id='__VIEWSTATE']/@value", "type":"text"},
+                		{ "command":"stream_to_html", "in":"_receiveData", "out":"__EVENTTARGET", "xpath":"//input[@id='__EVENTTARGET']/@value", "type":"text"},
+                		{ "command":"stream_to_html", "in":"_receiveData", "out":"__EVENTARGUMENT", "xpath":"//input[@id='__EVENTARGUMENT']/@value", "type":"text"},
+                		{ "command":"stream_to_html", "in":"_receiveData", "out":"__VIEWSTATEENCRYPTED", "xpath":"//input[@id='__VIEWSTATEENCRYPTED']/@value", "type":"text"},
+	        			{ "command":"var_to_var", "out":"_receiveData" }
+	                ]
+	    		},
+				{
+	    			"comment":"重新发送邮件",
+	                "HttpMethod":"Post",
+	                "url":"https://member.airasia.com/request-activation.aspx",
+	                "referer":"https://member.airasia.com/request-activation.aspx",
+	                "params":[
+	                	{ "httpKey":"__VIEWSTATE" , "localKey":"__VIEWSTATE" },
+	                    { "httpKey":"__EVENTTARGET" , "localKey":"__EVENTTARGET" },
+	                    { "httpKey":"__EVENTARGUMENT" , "localKey":"__EVENTARGUMENT" },
+	                    { "httpKey":"__VIEWSTATEENCRYPTED" , "localKey":"__VIEWSTATEENCRYPTED" },
+	                	{ "httpKey":"ctl00$body$txtEmail" , "localKey":"email" },
+	                	{ "httpKey":"ctl00$body$btnSubmitRequest" , "default":"提交" }
+	                ],
+	                "result_parserules":[
+	                	{"command":"stream_to_html","in":"_receiveData","out":"_resendMsg","xpath":"//article[@class='hackHeight']", "type":"text" },
+	                	{ "command":"trim", "in":"_resendMsg", "out":"_resendMsg" },
+	                	{ "command":"if", "if":["_resendMsg", ">", "@0", "length"], "rules":[
+							{ "command":"var_to_var", "in":"@success", "out":"resultStatus" }
+	        			], "else_rules":[
+							{ "command":"var_to_var", "in":"@fail", "out":"resultStatus" }
+	        			]},
+	        			{ "command":"var_to_var", "out":"__VIEWSTATE" },
+	        			{ "command":"var_to_var", "out":"_receiveData" }
+	                ]
+    			}
+		],
+		"active":[
+		   {
+				"HttpMethod":"Post",
+				"url":"http://103.37.164.146:9080/webmail/src/redirect.php",
+				"referer":"http://103.37.164.146:9080/webmail/src/login.php",
+				"ContentType":"application/x-www-form-urlencoded",
+				"params":[
+					{ "httpKey":"login_username", "localKey":"email" },
+					{ "httpKey":"secretkey", "default":"huoli123" },
+					{ "httpKey":"js_autodetect_results", "default":"1" },
+					{ "httpKey":"just_logged_in", "default":"1" }
+				],
+				"result_parserules":[
+					]
+			},
+			{
+				"HttpMethod":"Get",
+				"url":"http://103.37.164.146:9080/webmail/src/right_main.php",
+				"referer":"http://103.37.164.146:9080/webmail/src/webmail.php",
+				"params":[
+				],
+				"result_parserules":[
+					{ "command":"stream_to_string", "in":"_receiveData", "out":"tmpString" },
+					{ "command":"regular_text", "in":"tmpString", "out":"passed_id", "regular":"(?<=INBOX&amp;passed_id=).*?(?=&amp;startMessage=1\" >&#24555;&#23436;&#25104;&#20102;&#65281;)" },
+					{ "command":"if", "if":["passed_id", "=", "@0", "length"], "rules":[
+						{ "command":"regular_text", "in":"tmpString", "out":"passed_id", "regular":"(?<=INBOX&amp;passed_id=).*?(?=&amp;startMessage=1\" >&#28608;&#27963;&#38142;&#25509;&#35201;&#27714;)" },
+						{ "command":"if", "if":["passed_id", "=", "@0", "length"], "rules":[
+							{ "command":"var_to_var", "in":"@找不到激活的邮件", "out":"resultError" }
+			    	 	]}
+			    	 ]},
+					{ "command":"var_to_var", "out":"tmpString" }
+				]
+			},
+			{
+				"HttpMethod":"Get",
+				"url":"http://103.37.164.146:9080/webmail/src/read_body.php",
+				"referer":"http://103.37.164.146:9080/webmail/src/webmail.php",
+				"params":[
+					{ "httpKey":"mailbox","default":"INBOX"},
+					{ "httpKey":"passed_id","localKey":"passed_id"},
+					{ "httpKey":"startMessage","default":"1"}
+				],
+				"result_parserules":[
+					{ "command":"stream_to_string", "in":"_receiveData", "out":"tmpString" },
+					{ "command":"regular_text", "in":"tmpString", "out":"url", "regular":"(?<=redbuzzl.airasia.com).*?(?=\")" },
+					{ "command":"if", "if":["url", "=", "@0", "length"], "rules":[
+						{ "command":"var_to_var", "in":"@找不到激活的邮件", "out":"resultError" }
+					], "else_rules":[
+		    			{ "command":"array_to_string", "in":["@http://redbuzzl.airasia.com", "url"], "out":"activeUrl", "join":"" }
+					]},
+					{ "command":"var_to_var", "out":"url" },
+					{ "command":"var_to_var", "out":"tmpString" }
+				]
+			},
+			{
+				"HttpMethod":"Get",
+				"url":"_url",
+				"input_parserules":[
+					{ "command":"var_to_var", "in":"activeUrl", "out":"_url" }
+				],
+				"params":[
+				],
+				"result_parserules":[
+						{ "command":"stream_to_string", "in":"_receiveData", "out":"tmpString" },
+						{ "command":"regular_text", "in":"tmpString", "out":"expried", "regular":"似乎您所点击的相关激活链接已经到期"},
+						{ "command":"regular_text", "in":"tmpString", "out":"actived", "regular":"您的账户已经成功激活"},
+						{ "command":"if", "if":["expried", ">", "@0", "length"], "rules":[
+							{ "command":"var_to_var", "in":"@似乎您所点击的相关激活链接已经到期", "out":"successTip" },
+							{ "command":"var_to_var", "in":"@0", "out":"code" }
+					     ], "else_rules":[
+		    				{ "command":"var_to_var", "in":"@激活成功", "out":"successTip" },
+		    				{ "command":"var_to_var", "in":"@register", "out":"action" },
+							{ "command":"var_to_var", "in":"@1", "out":"code" }
+						]},
+						{ "command":"var_to_var", "out":"activeUrl" },
+						{ "command":"var_to_var", "out":"tmpString" }
+					]
+			},
+			{
+				"HttpMethod":"Post",
+				"comment":"发送微信告警消息",
+				"url":"_url",
+				"input_parserules":[
+					{ "command":"if", "if":["expried", ">", "@0", "length"], "rules":[
+						{ "command":"var_to_var", "in":"@http://wx.133.cn/hbrobot/pushalerm", "out":"_url" },
+						{ "command":"array_to_string", "in":["@{'user':'o4RQlNlm1gSPIAUieZzQkpxl5Htg','content':'亚航账号", "email", "@激活链接过期提醒'}"], "out":"sendform", "join":"" }
+					], "else_rules":[
+						{ "command":"var_to_var", "in":"@http://zhiji.rsscc.com/checkin/timestamp.json", "out":"_url" }
+					]}
+				],
+				"params":[
+					{ "httpKey":"sendform", "localKey":"sendform"}
+				],
+				"result_parserules":[
+				]
+			}
+		]
+    },
+
+    "settings":{
+		"input_fields":{
+		},
+		"exclude_from_local_dict":[
+			"_receiveData"
+		],
+		"User-Agent":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:42.0) Gecko/20100101 Firefox/42.0"
+    }
+}

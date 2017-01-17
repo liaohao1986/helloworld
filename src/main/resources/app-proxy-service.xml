@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 代理服务的配置文件 -->
+	<!-- 如果项目中存在context:property-placeholder配置,需要进行合并 -->
+	<context:property-placeholder location="classpath:proxy-service.properties" ignore-unresolvable="true"/>
+
+	<bean id="proxyServerValidator" class="com.huoli.proxy.service.ProxyServerValidator">
+		<property name="validateUrl" value="${proxy.validate.url}"></property>
+		<property name="validateResultRegExp" value="${proxy.validate.result.regexp}"></property>
+		<property name="validateTimeout" value="${proxy.validate.timeout}"></property>
+	</bean>
+
+	<task:executor id="validaeProxyExecutor" pool-size="${proxy.validate.poolsize}" />
+
+	<bean id="proxyServerValidateTaskProcessor" class="com.huoli.proxy.service.ProxyServerValidateTaskProcessor">
+		<property name="taskExecutor" ref="validaeProxyExecutor"></property>
+		<property name="proxyServerValidator" ref="proxyServerValidator"></property>
+	</bean>
+
+	<bean id="proxyDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="${proxy.datasource.driver}" />
+		<property name="jdbcUrl" value="${proxy.datasource.url}" />
+		<property name="user" value="${proxy.datasource.username}" />
+		<property name="password" value="${proxy.datasource.password}" />
+		<property name="maxPoolSize" value="2" />
+		<property name="minPoolSize" value="1" />
+		<property name="initialPoolSize" value="1" />
+		<property name="maxIdleTime" value="200" />
+		<property name="maxConnectionAge" value="180" />
+		<property name="acquireIncrement" value="1"></property>
+		<property name="maxStatements" value="0"></property>
+		<!-- 连接池重连设置 -->
+		<property name="breakAfterAcquireFailure" value="false"></property>
+		<property name="testConnectionOnCheckout" value="false"></property>
+		<property name="testConnectionOnCheckin" value="false"></property>
+		<property name="idleConnectionTestPeriod" value="60"></property>
+		<property name="acquireRetryAttempts" value="10"></property>
+		<property name="acquireRetryDelay" value="1000"></property>
+	</bean>
+
+	<bean id="proxyDao" class="com.huoli.proxy.dao.ProxyDao">
+		<property name="dataSource" ref="proxyDataSource"></property>
+	</bean>
+	<bean id="userAgentDao" class="com.huoli.proxy.dao.UserAgentDao">
+		<property name="dataSource" ref="proxyDataSource"></property>
+	</bean>
+
+	<bean id="userAgentService" class="com.huoli.proxy.service.UserAgentService" init-method="reload">
+		<property name="userAgentDao" ref="userAgentDao"></property>
+	</bean>
+
+	<bean id="proxyService" class="com.huoli.proxy.service.ProxyService" init-method="reload">
+		<property name="proxyDao" ref="proxyDao"></property>
+		<property name="userAgentService" ref="userAgentService"></property>
+		<property name="proxyServerValidator" ref="proxyServerValidator"></property>
+		<property name="proxyServerValidateTaskProcessor" ref="proxyServerValidateTaskProcessor"></property>
+		<property name="localdebugMode" value="${proxy.localdebug.mode}"></property>
+		<property name="validateTimeout" value="${proxy.validate.timeout}"></property>
+		<property name="proxyGroupId" value="${proxy.groupid}"></property>
+	</bean>
+
+
+	<task:scheduled-tasks>
+		<task:scheduled ref="proxyService" method="reload" fixed-rate="#{${proxy.reload.proxyserver.time}*1000}" initial-delay="#{${proxy.reload.proxyserver.time}*1000}" />
+	</task:scheduled-tasks>
+
+	<task:scheduled-tasks>
+		<task:scheduled ref="userAgentService" method="reload" fixed-rate="#{${proxy.reload.user.agent.time}*1000}" initial-delay="#{${proxy.reload.user.agent.time}*1000}" />
+	</task:scheduled-tasks>
+
+
+</beans>

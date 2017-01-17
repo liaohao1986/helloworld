@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     2012-4-18 00:05:44                                                        
+	 自动部署脚本
+     tongf                                                                
+     ====================================================================== -->
+<project name="auto-register" default="">
+	<import file="${user.home}/.ant/build-common.xml" />
+
+	<property name="app.dir" value="/home/checkin/auto-register" />
+
+	<property name="apptest.dir" value="${app.dir}" />
+	<property name="apptest.url" value="${username.test}:${password.test}@${server.test}:${apptest.dir}" />
+
+	<property name="app1.dir" value="${app.dir}" />
+	<property name="app1.url" value="${username.product}:${password.product}@${server.product}:${app1.dir}" />
+
+	<property name="app2.dir" value="${app.dir}" />
+	<property name="app2.url" value="${checkin.username.product2}:${checkin.password.product2}@${checkin.server.product2}:${app2.dir}" />
+
+	<property name="app-meituan.dir" value="${app.dir}" />
+	<property name="app-meituan.url" value="${server.meituan.url}:${app-meituan.dir}" />
+
+	<property name="server.product2" value="${checkin.server.product2}" />
+	<property name="username.product2" value="${checkin.username.product2}" />
+	<property name="password.product2" value="${checkin.password.product2}" />
+
+	<target name="download-log">
+		<sshexec host="${server.product2}" username="${username.product2}" password="${password.product2}" command="cd ${app2.dir}/logs;tail -n 100000 console.log>analysis.log;zip analysis.log.zip analysis.log" trust="true" />
+		<scp todir="/logs" file="${app2.url}/logs/analysis.log.zip" trust="true" />
+		<exec dir="/logs" executable="unzip">
+			<arg line="-o analysis.log.zip" />
+		</exec>
+	</target>
+</project>

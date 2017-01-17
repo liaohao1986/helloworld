@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+	<!-- 春秋官网注册请求 -->
+	<bean id="9cRegisterService" class="com.huoli.checkin.service.AutoRegisterService">
+		<property name="proxyService" ref="proxyService"></property>
+		<property name="queryAccountDao" ref="queryAccountDao"></property>
+		<property name="configFile" value="config/ticket-booking/9C_maopao.json"></property>
+		<property name="actionMap">
+			<map>
+				<entry key="prepare" value="0"></entry>
+				<entry key="add_email" value="0"></entry>
+				<entry key="register" value="3"></entry>
+				<entry key="active" value="50"></entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- 海航常旅客注册请求 -->
+	<bean id="huFFPCardRegisterService" class="com.huoli.checkin.service.AutoRegisterService">
+		<property name="proxyService" ref="proxyService"></property>
+		<property name="configFile" value="config/ffpcard/HU_24mail.json"></property>
+		<property name="queryAccountDao" ref="queryAccountDao"></property>
+		<property name="actionMap">
+			<map>
+				<entry key="prepare" value="0"></entry>
+				<entry key="add_email" value="0"></entry>
+				<entry key="get_verify_code" value="24"></entry>
+				<entry key="register" value="3"></entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- 亚航官网账号注册请求 -->
+	<bean id="akFFPCardRegisterService" class="com.huoli.checkin.service.AutoRegisterService">
+		<property name="proxyService" ref="proxyService"></property>
+		<property name="configFile" value="config/ffpcard/AK_register.json"></property>
+		<property name="queryAccountDao" ref="queryAccountDao"></property>
+		<property name="actionMap">
+			<map>
+				<entry key="register" value="2"></entry>
+				<entry key="active" value="30"></entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="autoRegisterServiceRouter" class="com.huoli.checkin.service.AutoRegisterServiceRouter">
+		<property name="serviceMap">
+			<map>
+				<entry key="chair-web" value-ref="9cRegisterService"></entry>
+				<entry key="hnair-ffpcard" value-ref="huFFPCardRegisterService"></entry>
+				<entry key="akair-ffpcard" value-ref="akFFPCardRegisterService"></entry>
+			</map>
+		</property>
+	</bean>
+	
+</beans>

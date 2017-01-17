@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	<!-- 载入属性文件 -->
+	<context:property-placeholder location="classpath:const.properties" ignore-unresolvable="true" />
+	
+	<context:component-scan base-package="com.huoli" />
+
+	<mvc:annotation-driven />
+	<!-- 开启aop -->
+	<aop:aspectj-autoproxy />
+
+	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="mediaTypes">
+			<map>
+				<entry key="xml" value="application/xml"></entry>
+				<entry key="json" value="application/json"></entry>
+			</map>
+		</property>
+		<property name="favorPathExtension" value="true"></property>
+		<property name="ignoreAcceptHeader" value="true"></property>
+		<property name="defaultContentType" value="application/json" />
+	</bean>
+
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="contentNegotiationManager" ref="contentNegotiationManager" />
+		<property name="defaultViews">
+			<list>
+				<!-- for application/json -->
+				<bean class="com.huoli.checkin.res.view.CustomMappingJacksonJsonView">
+					<property name="prettyPrint" value="true"></property>
+					<property name="objectMapper">
+						<bean class="com.fasterxml.jackson.databind.ObjectMapper">
+							<property name="dateFormat">
+								<bean class="java.text.SimpleDateFormat">
+									<constructor-arg value="yyyy-MM-dd HH:mm:ss"></constructor-arg>
+								</bean>
+							</property>
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.huoli.checkin.res.view.CustomMarshallingView">
+					<property name="marshaller">
+						<bean class="org.springframework.oxm.xstream.XStreamMarshaller">
+							<property name="autodetectAnnotations" value="true" />
+							<property name="converters">
+								<array>
+									<bean class="com.huoli.checkin.res.xstream.XStreamDataTypeConverter"></bean>
+								</array>
+							</property>
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+
+	</bean>
+
+</beans>
