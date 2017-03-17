@@ -52,23 +52,11 @@
 			<artifactId>proxy-service</artifactId>
 			<version>1.0.2</version>
 		</dependency>
-
-		<dependency>
-			<groupId>com.huoli</groupId>
-			<artifactId>checkin-name-code</artifactId>
-			<version>1.0.10</version>
-		</dependency>
 		
 		<dependency>
 			<groupId>com.huoli</groupId>
 			<artifactId>skydata</artifactId>
 			<version>1.0.4</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.huoli</groupId>
-			<artifactId>checkin-condition</artifactId>
-			<version>1.1.5</version>
 		</dependency>
 
 		<dependency>
@@ -115,6 +103,11 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
+			<version>4.2.6.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
 			<version>4.2.6.RELEASE</version>
 		</dependency>
 
@@ -317,6 +310,11 @@
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc14</artifactId>
 			<version>10.2.0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>1.9.0.RELEASE</version>
 		</dependency>
 	</dependencies>
 

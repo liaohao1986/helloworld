@@ -1,8 +1,8 @@
-package com.huoli.checkin.dao;
+package com.huoli.checkin;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ContextHolder {
-	public static ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath*:app-*test.xml");
+	public static ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath*:app-*.xml");
 }

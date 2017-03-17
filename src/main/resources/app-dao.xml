@@ -16,4 +16,5 @@
 	<bean id="queryAccountDao" class="com.huoli.checkin.dao.QueryAccountDao">
 		<property name="dataSource" ref="checkinDataSource"></property>
 	</bean>
+	
 </beans>

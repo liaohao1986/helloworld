@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.alibaba.fastjson.JSON;
@@ -28,18 +29,21 @@ import com.huoli.checkin.service.AutoRegisterServiceRouter;
  */
 public class AutoRegisterTask {
 
-    private Logger                    logger                   = LoggerFactory.getLogger(AutoRegisterTask.class);
+    private Logger logger = LoggerFactory.getLogger(AutoRegisterTask.class);
 
-    private ThreadPoolTaskExecutor    taskExecutor;
+    @Autowired
+    private ThreadPoolTaskExecutor taskExecutor;
 
-    private MailChannelDao            mailChannelDao;
+    @Autowired
+    private MailChannelDao mailChannelDao;
 
+    @Autowired
     private AutoRegisterServiceRouter autoRegisterServiceRouter;
 
-    private static AtomicInteger      activeCount              = new AtomicInteger(0);
+    private static AtomicInteger activeCount = new AtomicInteger(0);
 
     /** 正在处理的邮箱渠道，防止并发操作  key:"channel_mail" 渠道名称和邮箱 , value:时间戳*/
-    private static Map<String, Long>  processingMailChannelMap = new ConcurrentHashMap<String, Long>();
+    private static Map<String, Long> processingMailChannelMap = new ConcurrentHashMap<String, Long>();
 
     public void handle() {
         if (activeCount.get() > 3) {
@@ -103,18 +107,6 @@ public class AutoRegisterTask {
             }
             processingMailChannelMap.remove(entry.getKey());
         }
-    }
-
-    public void setTaskExecutor(ThreadPoolTaskExecutor taskExecutor) {
-        this.taskExecutor = taskExecutor;
-    }
-
-    public void setMailChannelDao(MailChannelDao mailChannelDao) {
-        this.mailChannelDao = mailChannelDao;
-    }
-
-    public void setAutoRegisterServiceRouter(AutoRegisterServiceRouter autoRegisterServiceRouter) {
-        this.autoRegisterServiceRouter = autoRegisterServiceRouter;
     }
 
 }

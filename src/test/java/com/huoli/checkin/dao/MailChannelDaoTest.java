@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.huoli.checkin.ContextHolder;
 import com.huoli.checkin.entity.MailChannel;
 
 public class MailChannelDaoTest {
