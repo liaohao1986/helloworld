@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
-import com.huoli.checkin.entity.AccountResult;
+import com.huoli.checkin.entity.mongo.AccountResult;
 
 /**
  * TODO:简单描述这个类的含义 <br>

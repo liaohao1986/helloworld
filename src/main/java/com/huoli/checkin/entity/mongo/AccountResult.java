@@ -1,4 +1,4 @@
-package com.huoli.checkin.entity;
+package com.huoli.checkin.entity.mongo;
 
 import java.util.Date;
 

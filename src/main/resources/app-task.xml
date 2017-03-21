@@ -10,15 +10,9 @@
 	<!-- 自动注册任务 -->
 	<bean id="autoRegisterTask" class="com.huoli.checkin.task.AutoRegisterTask" />
 
-	<!-- Mongo测试任务 -->
-	<bean id="mongoTask" class="com.huoli.checkin.task.MongoTask" />
-
 	<!-- 定时加载 -->
 	<!-- <task:scheduled-tasks> -->
 	<!-- <task:scheduled ref="autoRegisterTask" method="handle" fixed-delay="#{2*60*1000}" fixed-rate="#{2*60*1000}" /> -->
 	<!-- </task:scheduled-tasks> -->
 
-	<task:scheduled-tasks>
-		<task:scheduled ref="mongoTask" method="test" fixed-delay="#{2*60*1000}" fixed-rate="#{2*60*1000}" />
-	</task:scheduled-tasks>
 </beans>

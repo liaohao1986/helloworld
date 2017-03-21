@@ -1,23 +1,21 @@
-package com.huoli.checkin.entity;
+package com.huoli.checkin.entity.mongo;
 
 import java.util.Date;
 
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.huoli.checkin.util.MongoConstant;
-
 /**
  * 
- * title:值机结果实体类 <br>
+ * title:预选座位结果实体类 <br>
  * 版权: Copyright (c) 2011-2016<br>
  * 公司: 北京活力天汇<br>
  * 
  * @author:叶胜<br>
  * @date:Jun 28, 2016<br>
  */
-@Document(collection = MongoConstant.CHECKIN_RESULT)
-public class CheckinResult {
+@Document(collection = "reserve_result")
+public class ReserveResult {
 
 	/** 航司代码 */
 	@Indexed
@@ -30,7 +28,7 @@ public class CheckinResult {
 	private String client;
 	/** 系统时间 */
 	@Indexed
-	private Date sysDate;
+	private Date createTime;
 
 	public String getAirlineCode() {
 		return airlineCode;
@@ -64,11 +62,12 @@ public class CheckinResult {
 		this.client = client;
 	}
 
-	public Date getSysDate() {
-		return sysDate;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setSysDate(Date sysDate) {
-		this.sysDate = sysDate;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
+
 }

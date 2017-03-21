@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.huoli.checkin.dao.mongo;
 
 import java.util.List;
@@ -16,7 +13,7 @@ import org.springframework.stereotype.Component;
 import com.huoli.checkin.entity.CheckinResult;
 
 /**
- * TODO:简单描述这个类的含义 <br>
+ * MongoTemplate包装类 <br>
  * 版权：Copyright (c) 2011-2017<br>
  * 公司：北京活力天汇<br>
  * 版本：1.0<br>
@@ -24,72 +21,61 @@ import com.huoli.checkin.entity.CheckinResult;
  * 创建日期：2017年3月17日<br>
  */
 @Component
-public class MongoTemplateDao<T> {
+public class MongoTemplateWrapper<T> {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public T findOne(Query query, Class claszz, String collectionName) {
-        return (T) mongoTemplate.findOne(query, claszz, collectionName);
+    public T findOne(Query query, Class<T> entityClass, String collectionName) {
+        return (T) mongoTemplate.findOne(query, entityClass, collectionName);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public List<T> findAll(Query query, Class claszz) {
-        return mongoTemplate.find(query, claszz);
+    public List<T> findAll(Query query, Class<T> entityClass) {
+        return mongoTemplate.find(query, entityClass);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public List<T> findAll(Query query, Class claszz, String collectionName) {
-        return mongoTemplate.find(query, claszz, collectionName);
+    public List<T> findAll(Query query, Class<T> entityClass, String collectionName) {
+        return mongoTemplate.find(query, entityClass, collectionName);
     }
 
     public void insert(CheckinResult objectToSave) {
         mongoTemplate.insert(objectToSave);
     }
 
-    @SuppressWarnings({ "rawtypes" })
-    public T findOne(Map<String, Object> params, Class claszz, String collectionName) {
+    public T findOne(Map<String, Object> params, Class<T> entityClass, String collectionName) {
         Criteria criteria = new Criteria();
         for (Entry<String, Object> entry : params.entrySet()) {
             criteria.andOperator(Criteria.where(entry.getKey()).is(entry.getValue()));
         }
-        return findOne(new Query(criteria), claszz, collectionName);
+        return findOne(new Query(criteria), entityClass, collectionName);
     }
 
-    @SuppressWarnings({ "rawtypes" })
-    public List<T> findAll(Map<String, Object> params, Class claszz) {
+    public List<T> findAll(Map<String, Object> params, Class<T> entityClass) {
         Criteria criteria = new Criteria();
         for (Entry<String, Object> entry : params.entrySet()) {
             criteria.andOperator(Criteria.where(entry.getKey()).is(entry.getValue()));
         }
-        return findAll(new Query(criteria), claszz);
+        return findAll(new Query(criteria), entityClass);
     }
 
-    @SuppressWarnings({ "rawtypes" })
-    public List<T> findAll(Map<String, Object> params, Class claszz, String collectionName) {
+    public List<T> findAll(Map<String, Object> params, Class<T> entityClass, String collectionName) {
         Criteria criteria = new Criteria();
         for (Entry<String, Object> entry : params.entrySet()) {
             criteria.andOperator(Criteria.where(entry.getKey()).is(entry.getValue()));
         }
-        return findAll(new Query(criteria), claszz, collectionName);
+        return findAll(new Query(criteria), entityClass, collectionName);
     }
 
-    public List<T> findList(Class<T> clazz, Query query, int currentPage, int pageSize) {
+    public long count(Query query, Class<T> entityClass) {
+        return mongoTemplate.count(query, entityClass);
+    }
+
+    public List<T> findList(Class<T> entityClass, Query query, int currentPage, int pageSize) {
         //计算起始位置
         int startIndex = ((currentPage - 1) < 0 ? 0 : (currentPage - 1)) * pageSize;
         query.skip(startIndex);
         query.limit(pageSize);
-        return mongoTemplate.find(query, clazz);
-    }
-
-    public void update(Map<String, Object> params, String collectionName) {
-    }
-
-    public void createCollection(String collectionName) {
-    }
-
-    public void remove(Map<String, Object> params, String collectionName) {
+        return mongoTemplate.find(query, entityClass);
     }
 
 }
