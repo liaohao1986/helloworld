@@ -352,6 +352,33 @@ public class DB2JavaConvertor {
         }
         return buffer.toString();
     }
+    
+    
+    /**
+     * テーブル名からクラス名を作成
+     * @param tableName テーブル名
+     * @return クラス名
+     */
+    public String tableNameToClassName(String tableName) {
+        tableName = tableName.toLowerCase();
+        StringBuilder entityClassName = new StringBuilder();
+        boolean upper = true;
+        for (int i = 0; i < tableName.length(); i++) {
+            char c = tableName.charAt(i);
+            if (upper) {
+                entityClassName.append(Character.toUpperCase(c));
+                upper = false;
+            } else {
+                if (c == '_') {
+                    upper = true;
+                } else {
+                    entityClassName.append(c);
+                    upper = false;
+                }
+            }
+        }
+        return entityClassName.toString();
+    }
 
     public static void main(String[] args) throws IOException {
         DB2JavaConvertor bean = new DB2JavaConvertor();
