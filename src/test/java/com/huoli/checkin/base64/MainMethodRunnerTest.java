@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.huoli.checkin.base64;
 
 import org.junit.After;
@@ -9,21 +6,28 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import org.junit.runner.Request;
 
-/**
- * TODO:简单描述这个类的含义 <br>
- * 版权：Copyright (c) 2011-2017<br>
- * 公司：北京活力天汇<br>
- * 版本：1.0<br>
- * 作者：廖浩<br>
- * 创建日期：2017年4月14日<br>
- */
-public class JunitTest {
+public class MainMethodRunnerTest {
+    public static void main(String[] args) {
+        //        new Thread() {
+        //            public void run() {
+        //                JUnitCore.runClasses(new Class[] { APerfomanceTest.class });
+        //            }
+        //        }.start();
+
+//        new Thread() {
+//            public void run() {
+                new JUnitCore().run(Request.method(MainMethodRunnerTest.class, "test"));
+//            }
+//        }.start();
+    }
 
     /**
-     *
-     * @throws java.lang.Exception
-     */
+    *
+    * @throws java.lang.Exception
+    */
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         System.out.println("setUpBeforeClass()");
@@ -96,18 +100,15 @@ public class JunitTest {
     public void test() {
         System.out.println("test()");
     }
-    
 
     @Test
     public void test2() {
         System.out.println("test2()");
     }
-    
+
     @Test
     @Ignore
     public void test3() {
         System.out.println("test3()");
     }
-
-
 }
