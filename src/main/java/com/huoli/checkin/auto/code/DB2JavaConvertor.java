@@ -36,9 +36,9 @@ public class DB2JavaConvertor {
     //oracle: FLY_BOARD_CARD airport_inter_info 
     //mysql: checkin_condition2 AIRLINE_WEB_LOGIN
     //特别注意:由于getColumns大小写敏感，所以一定要写数据库实际的表名称
-    private final static String tableName = "AIRLINES_NORMAL";
+    private final static String tableName = "manual_pay_record";
     // mysql oracle
-    private final static String sqlType = "oracle";
+    private final static String sqlType = "mysql";
     //数据库的列名称
     private List<String> columnNameList;
     //列名类型数组  

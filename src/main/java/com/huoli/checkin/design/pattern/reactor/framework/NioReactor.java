@@ -93,10 +93,11 @@ public class NioReactor {
       try {
         LOGGER.info("Reactor started, waiting for events...");
         eventLoop();
-      } catch (IOException e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
     });
+    LOGGER.info("Reactor started finished");
   }
 
   /**
@@ -132,7 +133,7 @@ public class NioReactor {
     return this;
   }
 
-  private void eventLoop() throws IOException {
+  private void eventLoop() throws Exception {
     while (true) {
 
       // honor interrupt request
@@ -147,7 +148,9 @@ public class NioReactor {
        * Synchronous event de-multiplexing happens here, this is blocking call which returns when it is possible to
        * initiate non-blocking operation on any of the registered channels.
        */
+      LOGGER.info("Reactor started, waiting for events 2...");
       selector.select();
+      LOGGER.info("received event request...");
 
       /*
        * Represents the events that have occurred on registered handles.
@@ -163,6 +166,7 @@ public class NioReactor {
           continue;
         }
         processKey(key);
+        Thread.sleep(1000 *1);
       }
       keys.clear();
     }

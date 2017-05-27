@@ -4,7 +4,7 @@
 	 自动部署脚本
      tongf                                                                
      ====================================================================== -->
-<project name="auto-register" default="">
+<project name="helloworld" default="">
 	<import file="${user.home}/.ant/build-common.xml" />
 
 	<property name="app.dir" value="/home/checkin/auto-register" />

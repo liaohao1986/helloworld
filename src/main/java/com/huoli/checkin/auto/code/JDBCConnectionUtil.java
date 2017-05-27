@@ -56,7 +56,7 @@ public class JDBCConnectionUtil {
     }
 
     public static Connection getDefaultMysqlJdbcConnection() {
-        return getCustomizedConnection("com.mysql.jdbc.Driver", "jdbc:mysql://202.103.25.41:3306/checkin?useUnicode=true&characterEncoding=UTF-8", "root", "zencat");
+        return getCustomizedConnection("com.mysql.jdbc.Driver", "jdbc:mysql://202.103.25.41:3306/booking?useUnicode=true&characterEncoding=UTF-8", "root", "zencat");
     }
 
     public static Connection getDefaultOracleJdbcConnection() {

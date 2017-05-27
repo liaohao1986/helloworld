@@ -87,7 +87,7 @@ import com.huoli.checkin.design.pattern.reactor.framework.ThreadPoolDispatcher;
 public class App {
 
   private NioReactor reactor;
-  private List<AbstractNioChannel> channels = new ArrayList<>();
+  private List<AbstractNioChannel> channels = new ArrayList<AbstractNioChannel>();
   private Dispatcher dispatcher;
 
   /**
@@ -104,7 +104,7 @@ public class App {
    * App entry.
    */
   public static void main(String[] args) throws IOException {
-    new App(new ThreadPoolDispatcher(2)).start();
+    new App(new ThreadPoolDispatcher(5)).start();
   }
 
   /**

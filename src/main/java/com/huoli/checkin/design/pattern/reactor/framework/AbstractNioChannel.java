@@ -31,6 +31,8 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.google.common.collect.Maps;
+
 /**
  * This represents the <i>Handle</i> of Reactor pattern. These are resources managed by OS which can
  * be submitted to {@link NioReactor}.
@@ -46,7 +48,8 @@ public abstract class AbstractNioChannel {
 
     private final SelectableChannel channel;
     private final ChannelHandler handler;
-    private final Map<SelectableChannel, Queue<Object>> channelToPendingWrites = new ConcurrentHashMap<SelectableChannel, Queue<Object>>();
+//    private final Map<SelectableChannel, Queue<Object>> channelToPendingWrites = new ConcurrentHashMap<SelectableChannel, Queue<Object>>();
+    private final Map<SelectableChannel, Queue<Object>> channelToPendingWrites = Maps.newConcurrentMap();
     private NioReactor reactor;
 
     /**

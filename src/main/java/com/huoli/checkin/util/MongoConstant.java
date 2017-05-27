@@ -41,5 +41,13 @@ public class MongoConstant {
 
 	/** 集合plane_wifi_result */
 	public static final String PLANE_WIFI_RESULT = "plane_wifi_result";
+	
+    /**
+     * Singleton instance
+     * 
+     */
+    private MongoConstant() {
+
+    }
 
 }
