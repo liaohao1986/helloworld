@@ -14,7 +14,10 @@ package com.huoli.checkin.proxy;
 public class DefaultDynamicProxyFactory {
 
     AopProxy createAopProxy(Object target) {
-        if (target.getClass().isInterface()) {
+        //        Class<?>[] targetInterfaces = target.getClass().getInterfaces();
+
+        //如果是接口编程，用jdk动态代理
+        if (target.getClass().getInterfaces().length >= 1) {
             return new OrderServiceJdkDynamicProxy();
         }
         return new OrderServiceCGLibDynamicProxy();

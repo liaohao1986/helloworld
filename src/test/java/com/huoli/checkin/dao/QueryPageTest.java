@@ -12,12 +12,12 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.huoli.checkin.auto.code.DB2JavaConvertor;
+import com.huoli.checkin.auto.code.CodeGenerator;
 import com.huoli.checkin.auto.code.JDBCConnectionUtil;
 
 public class QueryPageTest {
 
-    private static Logger logger = LoggerFactory.getLogger(DB2JavaConvertor.class);
+    private static Logger logger = LoggerFactory.getLogger(CodeGenerator.class);
     private Connection connection;
 
     @BeforeClass

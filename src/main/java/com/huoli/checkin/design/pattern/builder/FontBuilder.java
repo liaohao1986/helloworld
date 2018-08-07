@@ -2,7 +2,6 @@ package com.huoli.checkin.design.pattern.builder;
 
 import java.awt.Font;
 
-import org.apache.commons.lang3.builder.Builder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;

@@ -56,11 +56,15 @@ public class JDBCConnectionUtil {
     }
 
     public static Connection getDefaultMysqlJdbcConnection() {
-        return getCustomizedConnection("com.mysql.jdbc.Driver", "jdbc:mysql://202.103.25.41:3306/booking?useUnicode=true&characterEncoding=UTF-8", "root", "zencat");
+        return getCustomizedConnection("com.mysql.jdbc.Driver", "jdbc:mysql://101.200.123.157:3306/booking?useUnicode=true&characterEncoding=UTF-8", "checkin", "querycek0602");
     }
 
     public static Connection getDefaultOracleJdbcConnection() {
-        return getCustomizedConnection("oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@202.103.25.41:1521:ora9i", "et", "et001");
+        return getCustomizedConnection("oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@101.200.123.157:1521:ora9i", "et", "et001");
+    }
+    
+    public static Connection getProductOracleJdbcConnection() {
+        return getCustomizedConnection("oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@120.133.0.161:1521:ora9i", "flightdyn", "flight0515 ");
     }
 
 }
