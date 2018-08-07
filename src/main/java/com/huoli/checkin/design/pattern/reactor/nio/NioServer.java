@@ -66,7 +66,6 @@ public class NioServer {
                         e.printStackTrace();
                         break;
                     }
-
                     //处理相关事件  
                     for (Iterator<SelectionKey> it = ops.iterator(); it.hasNext();) {
                         SelectionKey key = it.next();

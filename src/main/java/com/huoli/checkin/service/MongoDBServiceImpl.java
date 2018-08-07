@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.huoli.checkin.dao.mongo.MongoDBDao;
+import com.huoli.checkin.entity.Pagination;
 
 /**
  * TODO:简单描述这个类的含义 <br>
@@ -47,12 +48,13 @@ public class MongoDBServiceImpl implements MongoDBService {
         return mongoDBDao.find(clazz, query);
     }
 
-    //    @Override
-    //    public <T> Pagination<T> getPagination(Class<T> clazz, Query query, int currentPage, int pageSize) {
-    //        List<T> recordList = mongoDBDao.findList(clazz, query, currentPage, pageSize);
-    //        long recordCount = mongoDBDao.findCount(clazz, query);
-    //        return new Pagination<T>(currentPage, pageSize, recordCount, recordList);
-    //    }
+    @Override
+    public <T> Pagination<T> getPagination(Class<T> clazz, Query query, int currentPage,
+                                           int pageSize) {
+        List<T> recordList = mongoDBDao.findList(clazz, query, currentPage, pageSize);
+        long recordCount = mongoDBDao.findCount(clazz, query);
+        return new Pagination<T>(currentPage, pageSize, recordCount, recordList);
+    }
 
     @Override
     public <T> int update(Query query, Update update, Class<T> clazz) {

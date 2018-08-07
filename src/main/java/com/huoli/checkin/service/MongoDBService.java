@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
+import com.huoli.checkin.entity.Pagination;
+
 /**
  * TODO:简单描述这个类的含义 <br>
  * 版权：Copyright (c) 2011-2017<br>
@@ -30,7 +32,7 @@ public interface MongoDBService {
     /**
      * 分页查询
      */
-    //    <T> Pagination<T> getPagination(Class<T> clazz, Query query, int currentPage, int pageSize);
+    <T> Pagination<T> getPagination(Class<T> clazz, Query query, int currentPage, int pageSize);
 
     <T> int update(Query query, Update update, Class<T> clazz);
 }

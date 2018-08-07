@@ -10,7 +10,7 @@
 
 	<logger name="com.huoli" level="DEBUG" />
 
-	<root level="INFO">
+	<root level="DEBUG">
 		<appender-ref ref="console" />
 	</root>
 
